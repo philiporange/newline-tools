@@ -1,6 +1,6 @@
 # Newline Tools
 
-File processing utilities. Useful for working with massive datasets.
+File processing utilities for working with massive datasets.
 
 ## Installation
 
@@ -21,7 +21,7 @@ newline <command> [options]
 Shuffle lines in a file:
 
 ```
-newline shuffle <input_file> <output_file> [-b BUFFER_SIZE] [--progress] [--include_empty] [-r ROUNDS]
+newline shuffle <input_file> <output_file> [-b BUFFER_SIZE] [--progress] [--include_empty] [-r ROUNDS] [--seed SEED]
 ```
 
 Options:
@@ -29,6 +29,7 @@ Options:
 - `--progress`: Show progress bars during shuffling
 - `--include_empty`: Include empty lines during shuffling (default: ignore empty lines)
 - `-r, --rounds`: Number of shuffling rounds (default: 1)
+- `--seed`: Seed for random number generator (for reproducibility)
 
 ### dedupe
 
@@ -60,13 +61,14 @@ Options:
 Sample lines from a file:
 
 ```
-newline sample <input_file> <output_file> (-n NUM_LINES | -p PERCENTAGE) [--progress]
+newline sample <input_file> <output_file> (-n NUM_LINES | -p PERCENTAGE) [--progress] [--seed SEED]
 ```
 
 Options:
 - `-n, --num_lines`: Number of lines to sample
 - `-p, --percentage`: Percentage of lines to sample
 - `--progress`: Show progress bar during sampling
+- `--seed`: Seed for random number generator (for reproducibility)
 
 ## Python Usage
 
@@ -74,7 +76,7 @@ Options:
 from newline_tools import Shuffle, Dedupe, Split, Sample
 
 # Shuffle
-shuffler = Shuffle('input.txt', buffer_size=2**24, progress=True, ignore_empty=True, rounds=2)
+shuffler = Shuffle('input.txt', buffer_size=2**24, progress=True, ignore_empty=True, rounds=2, seed=42)
 shuffler.shuffle('output.txt')
 
 # Dedupe
@@ -88,7 +90,7 @@ splitter.split_by_parts('output_prefix', 5)
 splitter.split_by_size('output_prefix', '100MB')
 
 # Sample
-sampler = Sample('input.txt', 'output.txt', sample_size=10000)
+sampler = Sample('input.txt', 'output.txt', sample_size=10000, progress=True, seed=42)
 sampler.sample(method='reservoir')  # or 'index'
 ```
 
