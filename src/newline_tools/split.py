@@ -36,8 +36,9 @@ class Split:
         if self.total_lines == 0:
             return
 
-        if abs(sum(proportions) - 1) > 1e-6:
-            raise ValueError("Proportions must sum to 1")
+        # Normalize proportions
+        total = sum(proportions)
+        proportions = [p / total for p in proportions]
 
         lines_per_file = [round(p * self.total_lines) for p in proportions]
         # Adjust the last file to account for rounding errors

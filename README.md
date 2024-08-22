@@ -54,7 +54,7 @@ newline split <input_file> <output_prefix> (-n NUM_PARTS | -s SIZE | -p PROPORTI
 Options:
 - `-n, --num_parts`: Number of parts to split into
 - `-s, --size`: Size of each part (e.g., '100MB', '1GB')
-- `-p, --proportions`: Split by proportions (must sum to 1)
+- `-p, --proportions`: Split by proportions
 - `--progress`: Show progress bar during splitting
 
 Examples:
