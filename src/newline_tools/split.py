@@ -1,4 +1,3 @@
-import argparse
 import os
 from math import ceil
 
@@ -19,58 +18,49 @@ class Split:
         return f"{base}-{index}{ext}"
 
     def split_by_parts(self, n: int):
-        lines_per_file = ceil(self.total_lines / n)
+        if self.total_lines == 0:
+            return
+
+        lines_per_file = [ceil(self.total_lines / n)] * n
         self._split_file(lines_per_file)
 
     def split_by_size(self, size: int):
-        self._split_file(size)
+        if self.total_lines == 0:
+            return
 
-    def _split_file(self, lines_per_file: int):
+        n = ceil(self.total_lines / size)
+        lines_per_file = [size] * (n - 1) + [self.total_lines - size * (n - 1)]
+        self._split_file(lines_per_file)
+
+    def split_by_proportion(self, proportions: list):
+        if self.total_lines == 0:
+            return
+
+        if abs(sum(proportions) - 1) > 1e-6:
+            raise ValueError("Proportions must sum to 1")
+
+        lines_per_file = [round(p * self.total_lines) for p in proportions]
+        # Adjust the last file to account for rounding errors
+        lines_per_file[-1] = self.total_lines - sum(lines_per_file[:-1])
+        self._split_file(lines_per_file)
+
+    def _split_file(self, lines_per_file: list):
         with open(self.input_file, "r") as infile:
             file_index = 0
             line_count = 0
-            outfile = None
 
-            for line in infile:
-                if line_count % lines_per_file == 0:
-                    if outfile:
-                        outfile.close()
-                    outfile = open(
-                        self._generate_output_filename(file_index), "w"
-                    )
-                    file_index += 1
+            for lines in lines_per_file:
+                with open(
+                    self._generate_output_filename(file_index), "w"
+                ) as outfile:
+                    for _ in range(lines):
+                        line = infile.readline()
+                        if not line:  # End of file
+                            break
+                        outfile.write(line)
+                        line_count += 1
 
-                outfile.write(line)
-                line_count += 1
+                file_index += 1
 
-            if outfile:
-                outfile.close()
-
-
-def main():
-    parser = argparse.ArgumentParser(
-        description="Split a large text file into multiple files."
-    )
-    parser.add_argument("input_file", help="Path to the input file")
-    parser.add_argument("-o", "--output", help="Output file prefix")
-    group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("-n", type=int, help="Split into N files")
-    group.add_argument(
-        "-s", "--size", type=int, help="Split into files of SIZE lines each"
-    )
-    group.add_argument(
-        "-p", "--progress", action="store_true", help="Show progress bar"
-    )
-
-    args = parser.parse_args()
-
-    splitter = Split(args.input_file, args.output, args.progress)
-
-    if args.n:
-        splitter.split_by_parts(args.n)
-    elif args.size:
-        splitter.split_by_size(args.size)
-
-
-if __name__ == "__main__":
-    main()
+                if line_count >= self.total_lines:
+                    break

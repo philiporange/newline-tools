@@ -4,7 +4,7 @@
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 PROJECT_DIR="$(dirname $SCRIPTS_DIR)"
 MODULE_NAME="$(basename $PROJECT_DIR)"
-MODULE_DIR="$PROJECT_DIR/src/$MODULE_NAME"
+MODULE_DIR="$PROJECT_DIR/src/${MODULE_NAME//-/_}"
 TESTS_DIR="$PROJECT_DIR/tests"
 
 BLACK=black
@@ -15,7 +15,7 @@ GITIGNORE_URL="https://raw.githubusercontent.com/github/gitignore/main/Python.gi
 # Update .gitignore if older than 30 days
 GITIGNORE_PATH="$PROJECT_DIR/.gitignore"
 if [ ! -f $GITIGNORE_PATH ] || [ `find $GITIGNORE_PATH -mtime +30` ]; then
-    echo "Updating .gitignore" 
+    echo "Updating .gitignore"
     wget -O $GITIGNORE_PATH $GITIGNORE_URL 2>/dev/null
 fi
 # Don't allow cats in the repo

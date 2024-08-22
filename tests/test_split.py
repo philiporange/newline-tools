@@ -79,6 +79,23 @@ class TestSplit(unittest.TestCase):
         ]
         self.assertEqual(len(output_files), 0)
 
+    def test_split_by_proportion(self):
+        splitter = Split(self.input_file)
+        proportions = [0.3, 0.5, 0.2]
+        splitter.split_by_proportion(proportions)
+
+        # Check if 3 files were created
+        output_files = [
+            f for f in os.listdir(self.temp_dir) if f.startswith("input-")
+        ]
+        self.assertEqual(len(output_files), 3)
+
+        # Check if each file has the correct number of lines
+        expected_lines = [30, 50, 20]
+        for i, file in enumerate(sorted(output_files)):
+            with open(os.path.join(self.temp_dir, file), "r") as f:
+                self.assertEqual(len(f.readlines()), expected_lines[i])
+
 
 if __name__ == "__main__":
     unittest.main()

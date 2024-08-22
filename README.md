@@ -48,13 +48,21 @@ Options:
 Split a file into parts:
 
 ```
-newline split <input_file> <output_prefix> (-n NUM_PARTS | -s SIZE) [--progress]
+newline split <input_file> <output_prefix> (-n NUM_PARTS | -s SIZE | -p PROPORTIONS) [--progress]
 ```
 
 Options:
 - `-n, --num_parts`: Number of parts to split into
 - `-s, --size`: Size of each part (e.g., '100MB', '1GB')
+- `-p, --proportions`: Split by proportions (must sum to 1)
 - `--progress`: Show progress bar during splitting
+
+Examples:
+```
+newline split input.txt output_prefix -n 5
+newline split input.txt output_prefix -s 100MB
+newline split input.txt output_prefix -p 0.3 0.3 0.4
+```
 
 ### sample
 
@@ -88,6 +96,8 @@ splitter = Split('input.txt', progress=True)
 splitter.split_by_parts('output_prefix', 5)
 # or
 splitter.split_by_size('output_prefix', '100MB')
+# or
+splitter.split_by_proportion('output_prefix', [0.3, 0.3, 0.4])
 
 # Sample
 sampler = Sample('input.txt', 'output.txt', sample_size=10000, progress=True, seed=42)

@@ -62,14 +62,22 @@ def main():
     )
     split_parser.add_argument("input_file", help="Path to the input file")
     split_parser.add_argument("output_prefix", help="Prefix for output files")
-    split_parser.add_argument(
+    split_group = split_parser.add_mutually_exclusive_group(required=True)
+    split_group.add_argument(
         "-n", "--num_parts", type=int, help="Number of parts to split into"
     )
-    split_parser.add_argument(
+    split_group.add_argument(
         "-s",
         "--size",
         type=str,
         help="Size of each part (e.g., '100MB', '1GB')",
+    )
+    split_group.add_argument(
+        "-p",
+        "--proportions",
+        nargs="+",
+        type=float,
+        help="Split by proportions (must sum to 1)",
     )
     split_parser.add_argument(
         "--progress",
@@ -128,8 +136,13 @@ def main():
             splitter.split_by_parts(args.num_parts)
         elif args.size:
             splitter.split_by_size(args.size)
+        elif args.proportions:
+            splitter.split_by_proportion(args.proportions)
         else:
-            print("Error: Either --num_parts or --size must be specified")
+            print(
+                "Error: Either --num_parts, --size, or "
+                "--proportions must be specified"
+            )
             sys.exit(1)
 
     elif args.command == "sample":
