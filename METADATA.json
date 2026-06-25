@@ -1,73 +1,76 @@
 {
   "name": "newline-tools",
-  "short_description": "Command-line utilities for processing large text files with operations like shuffle, dedupe, split, and sample.",
-  "long_description": "Newline Tools is a Python library providing efficient, memory-conscious utilities for processing massive line-based text datasets. It offers four core operations: shuffle (randomize line order using buffered external sorting), dedupe (remove duplicate lines using Bloom filters), split (partition files by count, size, or proportion), and sample (extract random subsets via reservoir or index sampling). Designed for datasets that exceed available RAM, these tools use streaming algorithms and temporary file management to handle gigabyte-scale files on commodity hardware. Useful for data preparation, preprocessing machine learning datasets, and general text file manipulation.",
+  "short_description": "CLI and Python library for efficient processing of massive text files with operations like shuffling, deduplication, splitting, and sampling.",
+  "long_description": "Newline Tools is a command-line utility and Python library designed for working with massive text datasets. It provides four main operations: shuffle (randomize line order using buffer-based algorithm), dedupe (remove duplicate lines using Bloom filters), split (divide files by count, size, or proportions), and sample (extract random subsets using reservoir or index sampling). All operations are optimized for memory efficiency with configurable buffer sizes and support progress tracking. The library handles files that are too large to fit in memory by using temporary files and streaming processing.",
   "keywords": [
     "text-processing",
     "file-utilities",
-    "data-preprocessing",
+    "data-processing",
     "cli-tool",
-    "streaming-algorithms",
-    "large-file-handling",
+    "large-files",
+    "batch-processing",
     "shuffle",
     "deduplication",
+    "file-splitting",
     "sampling",
     "bloom-filter",
-    "python-library",
-    "command-line",
-    "dataset-tools",
-    "python"
+    "streaming",
+    "python-library"
   ],
   "primary_language": "Python",
   "languages": [
-    "Python"
+    "Python",
+    "Shell"
   ],
   "frameworks": [
+    "argparse",
     "tqdm",
     "profusion"
   ],
   "modules": [
     {
       "path": "src/newline_tools/shuffle.py",
-      "description": "Implements in-place shuffling of large files using buffered external sorting with multiple temporary files and weighted random selection."
+      "description": "Implements the Shuffle class for randomizing line order in large files using a buffer-based algorithm with multiple shuffling rounds."
     },
     {
       "path": "src/newline_tools/dedupe.py",
-      "description": "Removes duplicate lines from files using Bloom filter probabilistic data structure for memory-efficient deduplication."
+      "description": "Implements the Dedupe class for removing duplicate lines from files using Bloom filters for memory-efficient duplicate detection."
     },
     {
       "path": "src/newline_tools/split.py",
-      "description": "Splits large files into multiple parts by count, size, or custom proportions with sequential line distribution."
+      "description": "Implements the Split class for dividing files into multiple parts by number of parts, total size, or proportional ratios."
     },
     {
       "path": "src/newline_tools/sample.py",
-      "description": "Samples random subsets of lines from files using reservoir sampling or index-based sampling algorithms."
+      "description": "Implements the Sample class for extracting random subsets of lines using reservoir sampling or index-based sampling methods."
     },
     {
       "path": "src/newline_tools/utils.py",
-      "description": "Utility function for efficiently counting total lines in a file for progress tracking and size calculations."
-    },
-    {
-      "path": "src/newline_tools/__main__.py",
-      "description": "Command-line interface entry point with argument parsing for all four operations and integration with the public API."
+      "description": "Utility functions including count_lines() for efficiently counting total lines in a file."
     },
     {
       "path": "src/newline_tools/__init__.py",
-      "description": "Package initialization exposing public API classes and metadata including version, author, and license information."
+      "description": "Package initialization exposing Shuffle, Dedupe, Split, and Sample classes with version metadata."
+    },
+    {
+      "path": "src/newline_tools/__main__.py",
+      "description": "CLI entry point providing argument parsing and command dispatch for shuffle, dedupe, split, and sample subcommands."
+    },
+    {
+      "path": "tests/test_shuffle.py",
+      "description": "Unit tests for the Shuffle class including tests for randomization quality, edge cases, and statistical distribution."
+    },
+    {
+      "path": "tests/test_dedupe.py",
+      "description": "Unit tests for the Dedupe class covering duplicate removal, empty files, and various duplicate scenarios."
+    },
+    {
+      "path": "tests/test_split.py",
+      "description": "Unit tests for the Split class testing splitting by parts, size, and proportions with various file configurations."
+    },
+    {
+      "path": "tests/test_sample.py",
+      "description": "Unit tests for the Sample class covering both reservoir and index sampling methods with edge cases."
     }
-  ],
-  "git": {
-    "is_repo": true,
-    "remote_url": "https://github.com/philiporange/newline-tools.git",
-    "github_name": "philiporange/newline-tools",
-    "default_branch": "main",
-    "last_commit": "2024-08-22T11:42:22+01:00"
-  },
-  "stats": {
-    "files": 17,
-    "lines_of_code": 1226,
-    "size_bytes": 50611
-  },
-  "generated_at": "2025-12-06T22:13:49.572404",
-  "generator_version": "1.0.0"
+  ]
 }
